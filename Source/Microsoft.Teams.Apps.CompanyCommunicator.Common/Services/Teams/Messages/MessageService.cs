@@ -8,12 +8,15 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Xml;
     using Microsoft.Bot.Builder.Integration.AspNet.Core;
+    using Microsoft.Bot.Builder.Teams;
     using Microsoft.Bot.Connector.Authentication;
     using Microsoft.Bot.Schema;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.CommonBot;
+    using Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.MessageQueues.SendQueue;
     using Polly;
     using Polly.Contrib.WaitAndRetry;
     using Polly.Retry;
@@ -45,6 +48,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
             string conversationId,
             string serviceUrl,
             int maxAttempts,
+            bool shouldMentionAndNotify,
+            ChannelAccount account,
             ILogger log)
         {
             if (message is null)
@@ -93,6 +98,18 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
                     var policy = this.GetRetryPolicy(maxAttempts, log);
                     try
                     {
+                        // Prepare message.
+                        if (shouldMentionAndNotify)
+                        {
+                            var mention = new Mention
+                            {
+                                Mentioned = account,
+                                Text = $"<at>{XmlConvert.EncodeName(account.Name)}</at>",
+                            };
+                            message.Text = mention.Text;
+                            message.TeamsNotifyUser();
+                        }
+
                         // Send message.
                         await policy.ExecuteAsync(async () => await turnContext.SendActivityAsync(message));
 

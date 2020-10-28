@@ -141,6 +141,12 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Send.Func
                     serviceUrl: messageContent.GetServiceUrl(),
                     conversationId: messageContent.GetConversationId(),
                     maxAttempts: this.maxNumberOfAttempts,
+                    shouldMentionAndNotify: true,
+                    account: new ChannelAccount
+                    {
+                        AadObjectId = messageContent.RecipientData.UserData.AadId,
+                        Name = messageContent.RecipientData.UserData.Name,
+                    },
                     logger: log);
 
                 // Process response.

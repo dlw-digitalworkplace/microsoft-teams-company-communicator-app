@@ -20,6 +20,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
         /// <param name="conversationId">Conversation Id.</param>
         /// <param name="serviceUrl">The service URL to use for sending the notification.</param>
         /// <param name="maxAttempts">Max attempts to send the message.</param>
+        /// <param name="shouldMentionAndNotify">Defines if a mention and notification should be added to the message.</param>
+        /// <param name="account">Account to mention.</param>
         /// <param name="logger">Logger.</param>
         /// <returns>Send message response.</returns>
         public Task<SendMessageResponse> SendMessageAsync(
@@ -27,6 +29,8 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
             string conversationId,
             string serviceUrl,
             int maxAttempts,
+            bool shouldMentionAndNotify,
+            ChannelAccount account,
             ILogger logger);
     }
 }
