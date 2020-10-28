@@ -101,12 +101,12 @@ namespace Microsoft.Teams.Apps.CompanyCommunicator.Common.Services.Teams
                         // Prepare message.
                         if (shouldMentionAndNotify)
                         {
-                            var mention = new Mention
-                            {
-                                Mentioned = account,
-                                Text = $"<at>{XmlConvert.EncodeName(account.Name)}</at>",
-                            };
-                            message.Text = mention.Text;
+                            //var mention = new Mention
+                            //{
+                            //    Mentioned = account,
+                            //    Text = $"<at>{XmlConvert.EncodeName(account.Name)}</at>",
+                            //};
+                            //message.Text = mention.Text;
                             message.TeamsNotifyUser();
                         }
 
